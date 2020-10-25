@@ -12,11 +12,28 @@ import org.springframework.test.web.reactive.server.expectBody
 class RoutingConfigurationTest(@Autowired val client: WebTestClient) {
 
     @Test
-    fun router() {
+    fun helloWithPathParameter() {
         client.get()
-                .uri("/hello/bom")
+                .uri("/hello1/bom")
                 .exchange()
                 .expectStatus().isOk
                 .expectBody<String>().isEqualTo("Hello bom! How are you?")
+    }
+
+    @Test
+    fun helloWithQueryParameter() {
+        client.get()
+                .uri("/hello2?name=bom")
+                .exchange()
+                .expectStatus().isOk
+                .expectBody<String>().isEqualTo("Hello bom! How are you?")
+    }
+
+    @Test
+    fun helloWithMissingQueryParameter() {
+        client.get()
+                .uri("/hello2")
+                .exchange()
+                .expectStatus().isBadRequest
     }
 }
